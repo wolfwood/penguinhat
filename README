@@ -1,0 +1,5 @@
+The purpose of the Penguin Hat is to let processes that wish to use
+linux kernel modules in userspace supply the interface that these
+modules expect.
+
+the Penguin Hat is Dual Licensed CC0/WTFPL
