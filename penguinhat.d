@@ -1,30 +1,70 @@
 module penguinhat;
 
+version(TANGO){
+	import tango.io.Stdout;
+}
+
 // is this implicit?
 import mindrt.util;
 
-extern(C):
+extern(C) int printf(char *format, ...);
+extern(C) void exit(int);
+extern(C) void* malloc(size_t);
+extern(C) void free(void*);
 
+extern(C):
 
 /* ====== Driver Interface Primitives ====== */
 
 // int bus_register(struct bus_type *bus) 
-bus_register
+int bus_register(bus_type *bus) {
+	version(TANGO){
+		Stdout("bus_register").newline;
+	}
+
+	return 0;
+}
 
 // void bus_unregister(struct bus_type *bus) 
-bus_unregister
+void bus_unregister(bus_type *bus) {
+	version(TANGO){
+		Stdout("bus_unregister").newline;
+	}
+}
 
 // int device_register(struct device *dev)
-device_register
+int device_register(device *dev){
+	version(TANGO){
+		Stdout("device_register").newline;
+	}
+
+	return -1;
+}
 
 // void device_unregister(struct device *dev)
-device_unregister
+void device_unregister(device *dev){
+	version(TANGO){
+		Stdout("device_unregister").newline;
+	}
+
+}
 
 // int driver_register(struct device_driver *drv)
-driver_register
+int driver_register(device_driver *drv){
+	version(TANGO){
+		Stdout("driver_register").newline;
+	}
+
+	return -1;
+}
 
 // void driver_unregister(struct device_driver *)
-driver_unregister
+void driver_unregister(device_driver *drv){
+	version(TANGO){
+		Stdout("driver_unregister").newline;
+	}
+
+}
 
 
 /* ====== Kernel-> Userspace Event Delivery ====== */
@@ -32,26 +72,54 @@ driver_unregister
 // we are already in userspace, what to do?
 
 // int add_uevent_var(struct kobj_uevent_env *env, const char *format, ...)
-add_uevent_var
+int add_uevent_var(kobj_uevent_env *env, char *format, ...){
+	//printf(fmt, ...);
+	version(TANGO){
+		Stdout("add_uevent_var").newline;
+	}
+
+
+	return -1;
+}
 
 
 /* ====== Flavors of Printf ====== */
 
 // int dev_err(const struct device *dev, const char *fmt, ...)
-alias dev_err dev_warn;
+int dev_err(device* dev, char* fmt, ...){
+	version(TANGO){
+		Stdout("dev_warn").newline;
+	}
+
+	return 0;
+}
 
 // int dev_set_name(struct device *dev, const char *fmt, ...)
-alias dev_set_name dev_warn;
+int dev_set_name(device* dev, char* fmt, ...){
+	version(TANGO){
+		Stdout("dev_warn").newline;
+	}
+
+	return 0;
+}
 
 // int dev_warn(const struct device *dev, const char *fmt, ...)
-int dev_warn(sdevice *dev, char *fmt, ...){
-	printf(fmt, ...);
+int dev_warn(device* dev, char* fmt, ...){
+	//printf(fmt, ...);
+	version(TANGO){
+		Stdout("dev_warn").newline;
+	}
+
 	return 0;
 }
 
 // void panic(const char * fmt, ...)
-void panic(char * fmt, ...){
-	printf(fmt, ...);
+void panic(char* fmt, ...){
+	//printf(fmt, ...)
+	version(TANGO){
+		Stdout("panic").newline;
+	}
+;
 	exit(-1);
 }
 
@@ -65,17 +133,29 @@ void panic(char * fmt, ...){
 
 // void *__kmalloc(size_t size, gfp_t flags)
 void __kmalloc(size_t size, gfp_t flags){
+	version(TANGO){
+		Stdout("kmalloc").newline;
+	}
+
 	return malloc(size);
 }
 
 // ???
 void __tracepoint_kmalloc(){
-	//XXX: may be useful to not when this is called
+	//XXX: may be useful to note when this is called
+	version(TANGO){
+		Stdout("__tracepoint_kmalloc").newline;
+	}
+
 	return;
 }
 
 // void kfree(const void *objp)
 void kfree(ubyte* p){
+	version(TANGO){
+		Stdout("kfree").newline;
+	}
+
 	free(p);
 }
 
@@ -84,6 +164,11 @@ void kfree(ubyte* p){
 
 // unsigned long __phys_addr(unsigned long x)
 ulong __phys_addr(ulong x){
+	version(TANGO){
+		Stdout("__phys_addr").newline;
+	}
+
+
 	// XXX: Userspace paging trick magic? or use IO/MMU and return virtual addy?
 
 	// XXX: can't actually find where 
@@ -136,6 +221,7 @@ alias ulong size_t;
 };*/
 
 struct bus_type{
+	char* name;
 	
 }
 
@@ -223,5 +309,16 @@ struct driver_private *p;
 };*/
 
 struct device_driver{
+
+}
+
+/*
+struct kobj_uevent_env {                                                
+	char *envp[UEVENT_NUM_ENVP];
+  int envp_idx;
+  char buf[UEVENT_BUFFER_SIZE];
+  int buflen;
+	}*/
+struct kobj_uevent_env {
 
 }
