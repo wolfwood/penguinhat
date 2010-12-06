@@ -10,5 +10,5 @@ foreach $mod (@ARGV) {
 		$prefix = $mod;
 		$prefix =~ s/.ko//;
 		
-		system("objcopy --redefine-sym init_module=init_$prefix\_module $mod $o");
+		system("objcopy --redefine-sym init_module=init_$prefix\_module --redefine-sym cleanup_module=cleanup_$prefix\_module $mod $o");
 }

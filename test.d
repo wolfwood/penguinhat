@@ -1,7 +1,7 @@
 module test;
 
 import penguinhat;
-
+import dummy;
 import tango.io.Stdout;
 
 extern(C) void init_virtio_module();
